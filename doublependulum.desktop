@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Double Pendulum
+Type=Application
+Exec=/home/lennard/Projects/DoublePendulum/bin/doublependulum
+Icon=/home/lennard/Projects/DoublePendulum/resources/rayCastingIcon.png
+Terminal=false
