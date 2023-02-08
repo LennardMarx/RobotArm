@@ -30,14 +30,20 @@ int main()
 
     double pi = 3.141592653589793238462643383279502884197;
     double x0, y0, x1, y1, x2, y2; // link positions
-    x0 = 0; y0 = 0;
-    double l1 = 200, l2 = 100;
+    x0 = 0; y0 = 0; // base position
+    double l1 = 200, l2 = 100; // pendulum length on screen
 
-    Pendulum pendulum(pi / 2, 0);
+    Pendulum pendulum(0, 0); // pendulum with initial angles
+
+    double qd1 = 0;
+    double qd2 = 0;
 
     bool reset = false;
     bool pause = false;
     bool quit = false;
+    bool controllerOff = false;
+
+    int frameCount = 0;
 
     SDL_Event event;
 
@@ -70,7 +76,7 @@ int main()
             // integration
             for (int i = 0; i < 10; ++i) // two integration steps per frame
             {
-                pendulumDynamics.setReceivedInputs({ 0, 0 });
+                pendulumDynamics.setReceivedInputs({ qd1, qd2 });
 
                 // controller here?
 
@@ -91,6 +97,7 @@ int main()
             x2 = x1 + l2 * sin(pendulum.getStates().at(0) + pendulum.getStates().at(1));
             y2 = y1 + l2 * cos(pendulum.getStates().at(0) + pendulum.getStates().at(1));
         }
+
         // rendering screen
         ui.clear(); // clears screen
 
@@ -121,6 +128,33 @@ int main()
         // ui.drawLine(x1, y1, x2, y2);
 
         ui.present(); // shows rendered objects
+
+        frameCount += 1; // count Frame
+
+        // control sequence
+        if (frameCount >= 100 && frameCount <= 300)
+        {
+            qd1 = -pi / 6;
+            qd2 = 2 * pi / 3;
+        }
+        if (frameCount >= 300)
+        {
+            if (qd1 <= pi / 6)
+            {
+                qd1 += 0.01;
+                qd2 -= 0.01;
+            }
+        }
+        if (frameCount >= 600)
+        {
+            qd1 = pi - 0.001;
+            qd2 = 0;
+        }
+        if (frameCount >= 800)
+        {
+            qd1 = 0;
+            qd2 = 0;
+        }
 
         // frame time to limit FPS
         frameTime = SDL_GetTicks() - frameStart;

@@ -105,14 +105,9 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     double w1_D = beta1 * _states.at(2);
     double w2_D = beta2 * _states.at(3);
 
-    // Input / control law
-    //double tau1 = 0;
-    //double tau2 = 0;
-    double pi = 3.141592653589793238462643383279502884197;
-    double qd1 = -pi / 6;
-    double qd2 = 2 * pi / 3;
-    double tau1 = 5 * (qd1 - _states.at(0)) - 1.5 * (_states.at(2)) + ((m1 + m2) * l1 * sin(qd1) + m2 * l2 * sin(qd1 + qd2)) * g;
-    double tau2 = 5 * (qd2 - _states.at(1)) - 1.5 * (_states.at(3)) + (m2 * l2 * sin(qd1 + qd2)) * g;
+    // Control Law / Input
+    double tau1 = 3 * (_u.at(0) - _states.at(0)) - 0.25 * (_states.at(2)) + ((m1 + m2) * l1 * sin(_u.at(0)) + m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
+    double tau2 = 3 * (_u.at(1) - _states.at(1)) - 0.25 * (_states.at(3)) + (m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
     // tau1 = 0;
     // tau2 = 0;
 
