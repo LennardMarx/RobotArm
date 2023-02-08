@@ -105,9 +105,16 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     double w1_D = beta1 * _states.at(2);
     double w2_D = beta2 * _states.at(3);
 
-    // Input
-    double tau1 = 0;
-    double tau2 = 0;
+    // Input / control law
+    //double tau1 = 0;
+    //double tau2 = 0;
+    double pi = 3.141592653589793238462643383279502884197;
+    double qd1 = -pi / 6;
+    double qd2 = 2 * pi / 3;
+    double tau1 = 5 * (qd1 - _states.at(0)) - 1.5 * (_states.at(2)) + ((m1 + m2) * l1 * sin(qd1) + m2 * l2 * sin(qd1 + qd2)) * g;
+    double tau2 = 5 * (qd2 - _states.at(1)) - 1.5 * (_states.at(3)) + (m2 * l2 * sin(qd1 + qd2)) * g;
+    // tau1 = 0;
+    // tau2 = 0;
 
     // terms to be multiplied with M_inv matrix
     double term1 = tau1 - w1_C - w1_G - w1_D;
@@ -119,7 +126,7 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     // w2_dot
     _output.at(3) = (-m2 * l2 * l2 - m2 * l1 * l2 * cos(_states.at(1))) / det_M * term1 + ((m1 + m2) * l1 * l1 + m2 * l2 * l2 + 2 * m2 * l1 * l2 * cos(_states.at(1))) / det_M * term2;
 
-    // std::cout << _states.at(0) << std::endl;
+    // std::cout << tau1 << std::endl;
 
     return _output;
 }

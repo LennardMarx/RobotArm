@@ -28,12 +28,12 @@ int main()
     UI ui{ 1200, 800 };
     PendulumDynamics pendulumDynamics;
 
-    double pi = 3.141593;
+    double pi = 3.141592653589793238462643383279502884197;
     double x0, y0, x1, y1, x2, y2; // link positions
     x0 = 0; y0 = 0;
     double l1 = 200, l2 = 100;
 
-    Pendulum pendulum(pi, 0);
+    Pendulum pendulum(pi / 2, 0);
 
     bool reset = false;
     bool pause = false;
@@ -68,16 +68,16 @@ int main()
             }
 
             // integration
-            // for (int i = 0; i < 2; ++i) // two integration steps per frame
-            // {
-            pendulumDynamics.setReceivedInputs({ 0, 0 });
+            for (int i = 0; i < 10; ++i) // two integration steps per frame
+            {
+                pendulumDynamics.setReceivedInputs({ 0, 0 });
 
-            // controller here?
+                // controller here?
 
-            pendulumDynamics.setReceivedStates(pendulum.getStates());
-            pendulumDynamics.rungeKutta();
-            pendulum.setStates(pendulumDynamics.getUpdatedStates());
-            // }
+                pendulumDynamics.setReceivedStates(pendulum.getStates());
+                pendulumDynamics.rungeKutta();
+                pendulum.setStates(pendulumDynamics.getUpdatedStates());
+            }
 
             // calculate coordinates of links (absolute angles)
             // x1 = x0 + l1 * sin(pendulum.getStates().at(0));

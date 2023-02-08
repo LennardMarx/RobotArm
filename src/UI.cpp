@@ -30,7 +30,7 @@ UI::~UI()
 
 void UI::clear()
 {
-    setDrawColor(0, 120, 170, 255);
+    setDrawColor(0, 70, 110, 255);
     SDL_RenderClear(renderer);
     setDrawColor(255, 255, 255, 255);
 }
