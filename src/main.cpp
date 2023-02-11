@@ -155,6 +155,10 @@ int main()
             qd1 = 0;
             qd2 = 0;
         }
+        if (frameCount >= 1000)
+        {
+            frameCount = 0;
+        }
 
         // frame time to limit FPS
         frameTime = SDL_GetTicks() - frameStart;
