@@ -132,15 +132,24 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
     double x = _pos.at(0);
     double y = _pos.at(1);
     double x0, y0;
-    // double cos2 = (x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2);
-    // double sin2 = sqrt(1 - cos2 * cos2);
-    // angles.at(1) = atan2(sin2, cos2); // theta 2
-    // double k1 = l1 + l2 * cos2;
-    // double k2 = l2 * sin2;
-    // double sin1 = (y * k1 - x * k2) / (k1 * k1 + k2 * k2);
-    // double cos1 = y - k1 * sin1 * k2;
-    // angles.at(0) = atan2(sin1, cos1) + pi / 2; // theta 1
 
+    // counting turn if endeffector crosses origin (+- 2 pi)
+    if (x < 0 && x_prev >= 0 && y < 0)
+    {
+        turncounter -= 1;
+    }
+    else if (x >= 0 && x_prev < 0 && y < 0)
+    {
+        turncounter += 1;
+    }
+    //saving previous x position
+    x_prev = x;
+    //std::cout << x << ", " << y << "," << turncounter << std::endl;
+
+    // if (y < 0 && y_prev > 0 && x < 0)
+    // {
+    //     turncounter -= 1;
+    // }
     // calculating inverse kinematics always in quadtrant 1 and transforming to other quadrants!
     if (x >= 0 && y >= 0)
     {
@@ -165,6 +174,8 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
         angles.at(0) = pi / 2 + atan(y / x) - atan((l2 * sin(angles.at(1))) / (l1 + l2 * cos(angles.at(1)))) + pi / 2;
     }
     // std::cout << angles.at(0) * 180 / pi << ", " << angles.at(1) * 180 / pi << std::endl;
+
+    angles.at(0) += turncounter * 2 * pi;
 
     return angles;
 }

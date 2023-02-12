@@ -36,6 +36,7 @@ int main()
     std::vector<std::array<double, 2>> trajectory;
     x0 = 0; y0 = 0; // base position
     double l1 = 150, l2 = 150; // pendulum length on screen
+    double x_ph, y_ph; // placeholder coordinates
 
     Pendulum pendulum(0, 0); // pendulum with initial angles
     Uint32 mouseState;
@@ -86,18 +87,32 @@ int main()
 
             // mouse position
             mouseState = SDL_GetMouseState(&x, &y);
-            // coordinates to window center and conversion to meters
+            // coordinates to window center
             x = x - window_width / 2;
             y = y - window_height / 2;
-            x_conv = x * 1 / (l1 + l2);
-            y_conv = y * 1 / (l1 + l2);
             // converting pixels into endeffector position in meters
+            x_conv = x * 1 / (l1 + l2); // total length of robot arm over total length in pixels
+            y_conv = -y * 1 / (l1 + l2);
             if (sqrt(x_conv * x_conv + y_conv * y_conv) < 1)
             {
                 xd = x_conv;
-                yd = -y_conv;
+                yd = y_conv; // flipping y for IK assumptions
             }
-            //std::cout << xd << ", " << yd << std::endl;
+            // when mouse is outside of workspace
+            else if (sqrt(x_conv * x_conv + y_conv * y_conv) >= 1)
+            {
+                double th1 = atan(y_conv / x_conv);
+                xd = 0.9999 * cos(th1);
+                yd = 0.9999 * sin(th1);
+                if (x_conv < 0)
+                {
+                    th1 += 2 * pi;
+                    xd = -0.9999 * sin(th1 + pi / 2);
+                    yd = 0.9999 * cos(th1 + pi / 2);
+                }
+
+            }
+            std::cout << xd << ", " << yd << std::endl;
 
 
             // integration

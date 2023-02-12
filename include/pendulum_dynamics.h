@@ -45,4 +45,6 @@ protected:			 // maybe change to private -> pass by reference
     const double l1 = 0.5;		// Length Link 1
     const double l2 = 0.5;		// Length Link 2
     const double pi = 3.141592653589793238462643383279502884197;
+    double x_prev;
+    int turncounter = 0;
 };
