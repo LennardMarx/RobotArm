@@ -23,6 +23,8 @@ public:
 
     std::array<double, 2> inverseKinematics(std::array<double, 2>);
 
+    void switchControllerState();
+
     // virtual runge kutta methods to be overridden
     void rungeKutta();
     virtual std::array<double, 4> f(std::array<double, 4>, std::array<double, 2>&);
@@ -47,4 +49,5 @@ protected:			 // maybe change to private -> pass by reference
     const double pi = 3.141592653589793238462643383279502884197;
     double x_prev;
     int turncounter = 0;
+    bool controllerOff = false;
 };

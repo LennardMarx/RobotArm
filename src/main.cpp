@@ -36,7 +36,6 @@ int main()
     std::vector<std::array<double, 2>> trajectory;
     x0 = 0; y0 = 0; // base position
     double l1 = 150, l2 = 150; // pendulum length on screen
-    double x_ph, y_ph; // placeholder coordinates
 
     Pendulum pendulum(0, 0); // pendulum with initial angles
     Uint32 mouseState;
@@ -66,9 +65,41 @@ int main()
         while (SDL_PollEvent(&event) != 0)
         {
             // stop when pressing "x" (?)
-            if (event.type == SDL_QUIT)
-            {
+            // if (event.type == SDL_QUIT)
+            // {
+            //     quit = true;
+            // }
+            // if (keyPress == 'Q')
+            // {
+            //     quit = true;
+            // }
+            switch (event.type) {
+            case SDL_QUIT:
                 quit = true;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym) {
+                case SDLK_LEFT:
+                    break;
+                case SDLK_RIGHT:
+                    break;
+                case SDLK_UP:
+                    break;
+                case SDLK_DOWN:
+                    break;
+                case SDLK_ESCAPE:
+                    quit = true;
+                case SDLK_c:
+                    pendulumDynamics.switchControllerState();
+                default:
+                    break;
+                }
+
+            case SDL_KEYUP:
+                printf("Key release detected\n");
+                break;
+
+            default:
+                break;
             }
         }
         // pause the game
@@ -101,18 +132,17 @@ int main()
             // when mouse is outside of workspace
             else if (sqrt(x_conv * x_conv + y_conv * y_conv) >= 1)
             {
+                // calculate position on unit circle (total robot length = 1!!)
                 double th1 = atan(y_conv / x_conv);
-                xd = 0.9999 * cos(th1);
-                yd = 0.9999 * sin(th1);
+                xd = 0.99999 * cos(th1); // can't handle exactly 1
+                yd = 0.99999 * sin(th1);
                 if (x_conv < 0)
                 {
-                    th1 += 2 * pi;
-                    xd = -0.9999 * sin(th1 + pi / 2);
-                    yd = 0.9999 * cos(th1 + pi / 2);
+                    xd = -xd; yd = -yd; // flipping for quadrant 2 and 3
                 }
 
             }
-            std::cout << xd << ", " << yd << std::endl;
+            // std::cout << xd << ", " << yd << std::endl;
 
 
             // integration
@@ -170,11 +200,11 @@ int main()
         // }
         // draw trajectory
 
-        for (int i = 1; i < trajectory.size(); i++)
-        {
-            ui.setDrawColor(255, 255, 255, i);
-            ui.drawLine(trajectory.at(i - 1).at(0), trajectory.at(i - 1).at(1), trajectory.at(i).at(0), trajectory.at(i).at(1));
-        }
+        // for (int i = 1; i < trajectory.size(); i++)
+        // {
+        //     ui.setDrawColor(255, 255, 255, i);
+        //     ui.drawLine(trajectory.at(i - 1).at(0), trajectory.at(i - 1).at(1), trajectory.at(i).at(0), trajectory.at(i).at(1));
+        // }
 
         if (trajectory.size() > 200)
         {

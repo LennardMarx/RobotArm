@@ -106,10 +106,15 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     double w2_D = beta2 * _states.at(3);
 
     // Control Law / Input
-    double tau1 = 35 * (_u.at(0) - _states.at(0)) - 5 * (_states.at(2)) + ((m1 + m2) * l1 * sin(_u.at(0)) + m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
-    double tau2 = 35 * (_u.at(1) - _states.at(1)) - 5 * (_states.at(3)) + (m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
+    double tau1 = 50 * (_u.at(0) - _states.at(0)) - 5 * (_states.at(2)) + ((m1 + m2) * l1 * sin(_u.at(0)) + m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
+    double tau2 = 50 * (_u.at(1) - _states.at(1)) - 5 * (_states.at(3)) + (m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
     // tau1 = 0;
     // tau2 = 0;
+    if (controllerOff)
+    {
+        tau1 = 0;
+        tau2 = 0;
+    }
 
     // terms to be multiplied with M_inv matrix
     double term1 = tau1 - w1_C - w1_G - w1_D;
@@ -178,6 +183,11 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
     angles.at(0) += turncounter * 2 * pi;
 
     return angles;
+}
+
+void PendulumDynamics::switchControllerState()
+{
+    controllerOff = !controllerOff;
 }
 
 // method to add each position of an array with the according position of another
