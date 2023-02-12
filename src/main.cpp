@@ -24,19 +24,27 @@ int main()
     const int frameDelay = 1000 / FPS; // delay according to FPS
     Uint32 frameStart;                 // keeps track of time (?)
     int frameTime;
-
-    UI ui{ 1200, 800 };
+    int window_width = 1200;
+    int window_height = 800;
+    UI ui{ window_width, window_height };
     PendulumDynamics pendulumDynamics;
 
     double pi = 3.141592653589793238462643383279502884197;
     double x0, y0, x1, y1, x2, y2; // link positions
     x0 = 0; y0 = 0; // base position
-    double l1 = 200, l2 = 100; // pendulum length on screen
+    double l1 = 150, l2 = 150; // pendulum length on screen
 
     Pendulum pendulum(0, 0); // pendulum with initial angles
+    Uint32 mouseState;
+    int x, y;
+    double x_conv;
+    double y_conv;
 
-    double qd1 = 0;
-    double qd2 = 0;
+    double qd1 = 0; // desired angle 1
+    double qd2 = 0; // desired angle 2
+    // not working when robot base at 0, 0?
+    double xd = 0; // desired x (when doing inverse kinematics) (!! in meters not pixels !!)
+    double yd = -1; // desired y
 
     bool reset = false;
     bool pause = false;
@@ -73,23 +81,33 @@ int main()
                 reset = false;
             }
 
+            // mouse position
+            mouseState = SDL_GetMouseState(&x, &y);
+            // coordinates to window center and conversion to meters
+            x = x - window_width / 2;
+            y = y - window_height / 2;
+            x_conv = x * 1 / (l1 + l2);
+            y_conv = y * 1 / (l1 + l2);
+            // converting pixels into endeffector position in meters
+            if (sqrt(x_conv * x_conv + y_conv * y_conv) < 1)
+            {
+                xd = x_conv;
+                yd = -y_conv;
+            }
+            std::cout << xd << ", " << yd << std::endl;
+
+
             // integration
             for (int i = 0; i < 10; ++i) // two integration steps per frame
             {
-                pendulumDynamics.setReceivedInputs({ qd1, qd2 });
-
+                // pendulumDynamics.setReceivedInputs({ qd1, qd2 });
+                pendulumDynamics.setReceivedInputs(pendulumDynamics.inverseKinematics({ xd, yd }));
                 // controller here?
 
                 pendulumDynamics.setReceivedStates(pendulum.getStates());
                 pendulumDynamics.rungeKutta();
                 pendulum.setStates(pendulumDynamics.getUpdatedStates());
             }
-
-            // calculate coordinates of links (absolute angles)
-            // x1 = x0 + l1 * sin(pendulum.getStates().at(0));
-            // y1 = y0 + l1 * cos(pendulum.getStates().at(0));
-            // x2 = x1 + l2 * sin(pendulum.getStates().at(1));
-            // y2 = y1 + l2 * cos(pendulum.getStates().at(1));
 
             // calculate coordinates of links (relative angles)
             x1 = x0 + l1 * sin(pendulum.getStates().at(0));
@@ -113,15 +131,12 @@ int main()
         ui.drawLine(x0 + width * sin(ang1), y0 - width * cos(ang1), x0 - width * sin(ang1), y0 + width * cos(ang1));
         ui.drawLine(x1 + width * sin(ang1), y1 - width * cos(ang1), x1 - width * sin(ang1), y1 + width * cos(ang1));
 
-
-
         // link 2
         ui.drawLine(x1 + width * sin(ang2), y1 - width * cos(ang2), x2 + width * sin(ang2), y2 - width * cos(ang2));
         ui.drawLine(x1 - width * sin(ang2), y1 + width * cos(ang2), x2 - width * sin(ang2), y2 + width * cos(ang2));
 
         ui.drawLine(x1 + width * sin(ang2), y1 - width * cos(ang2), x1 - width * sin(ang2), y1 + width * cos(ang2));
         ui.drawLine(x2 + width * sin(ang2), y2 - width * cos(ang2), x2 - width * sin(ang2), y2 + width * cos(ang2));
-
 
         // draw pendulum links (middle line)
         // ui.drawLine(x0, y0, x1, y1);
@@ -131,34 +146,84 @@ int main()
 
         frameCount += 1; // count Frame
 
-        // control sequence
-        if (frameCount >= 100 && frameCount <= 300)
-        {
-            qd1 = -pi / 6;
-            qd2 = 2 * pi / 3;
-        }
-        if (frameCount >= 300)
-        {
-            if (qd1 <= pi / 6)
-            {
-                qd1 += 0.01;
-                qd2 -= 0.01;
-            }
-        }
-        if (frameCount >= 600)
-        {
-            qd1 = pi - 0.001;
-            qd2 = 0;
-        }
-        if (frameCount >= 800)
-        {
-            qd1 = 0;
-            qd2 = 0;
-        }
-        if (frameCount >= 1000)
-        {
-            frameCount = 0;
-        }
+        // // control sequence
+        // if (frameCount >= 100 && frameCount <= 300)
+        // {
+        //     qd1 = -pi / 6;
+        //     qd2 = 2 * pi / 3;
+        // }
+        // if (frameCount >= 300)
+        // {
+        //     if (qd1 <= pi / 6)
+        //     {
+        //         qd1 += 0.01;
+        //         qd2 -= 0.01;
+        //     }
+        // }
+        // if (frameCount >= 600)
+        // {
+        //     qd1 = pi - 0.001;
+        //     qd2 = 0;
+        // }
+        // if (frameCount >= 800)
+        // {
+        //     qd1 = 0;
+        //     qd2 = 0;
+        // }
+        // if (frameCount >= 1000)
+        // {
+        //     frameCount = 0;
+        // }
+
+        // drawing a rectangle with the endeffector
+        // if (frameCount >= 100 && frameCount < 300)
+        // {
+        //     xd = 0;
+        //     yd = -0.5;
+        // }
+        // if (frameCount >= 300 && frameCount < 500)
+        // {
+        //     if (xd <= 0.5)
+        //     {
+        //         xd += 0.01;
+        //     }
+        // }
+        // if (frameCount >= 500 && frameCount < 700)
+        // {
+        //     if (yd <= 0.5)
+        //     {
+        //         yd += 0.01;
+        //     }
+        // }
+        // if (frameCount >= 700 && frameCount < 900)
+        // {
+        //     if (xd >= -0.5)
+        //     {
+        //         xd -= 0.01;
+        //     }
+        // }
+        // if (frameCount >= 900 && frameCount < 1100)
+        // {
+        //     if (yd >= -0.5)
+        //     {
+        //         yd -= 0.01;
+        //     }
+        // }
+        // if (frameCount >= 1100 && frameCount < 1300)
+        // {
+        //     if (xd < 0)
+        //     {
+        //         xd += 0.01;
+        //     }
+        // }
+        // if (frameCount >= 1300 && frameCount < 1500)
+        // {
+        //     if (yd >= -0.99)
+        //     {
+        //         yd -= 0.01;
+        //     }
+        // }
+        // std::cout << xd << ", " << yd << ", " << frameCount << std::endl;
 
         // frame time to limit FPS
         frameTime = SDL_GetTicks() - frameStart;

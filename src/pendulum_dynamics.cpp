@@ -106,8 +106,8 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     double w2_D = beta2 * _states.at(3);
 
     // Control Law / Input
-    double tau1 = 3 * (_u.at(0) - _states.at(0)) - 0.25 * (_states.at(2)) + ((m1 + m2) * l1 * sin(_u.at(0)) + m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
-    double tau2 = 3 * (_u.at(1) - _states.at(1)) - 0.25 * (_states.at(3)) + (m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
+    double tau1 = 35 * (_u.at(0) - _states.at(0)) - 5 * (_states.at(2)) + ((m1 + m2) * l1 * sin(_u.at(0)) + m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
+    double tau2 = 35 * (_u.at(1) - _states.at(1)) - 5 * (_states.at(3)) + (m2 * l2 * sin(_u.at(0) + _u.at(1))) * g;
     // tau1 = 0;
     // tau2 = 0;
 
@@ -124,6 +124,49 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     // std::cout << tau1 << std::endl;
 
     return _output;
+}
+
+std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> _pos)
+{
+    std::array<double, 2> angles;
+    double x = _pos.at(0);
+    double y = _pos.at(1);
+    double x0, y0;
+    // double cos2 = (x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2);
+    // double sin2 = sqrt(1 - cos2 * cos2);
+    // angles.at(1) = atan2(sin2, cos2); // theta 2
+    // double k1 = l1 + l2 * cos2;
+    // double k2 = l2 * sin2;
+    // double sin1 = (y * k1 - x * k2) / (k1 * k1 + k2 * k2);
+    // double cos1 = y - k1 * sin1 * k2;
+    // angles.at(0) = atan2(sin1, cos1) + pi / 2; // theta 1
+
+    // calculating inverse kinematics always in quadtrant 1 and transforming to other quadrants!
+    if (x >= 0 && y >= 0)
+    {
+        angles.at(1) = acos((x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2));
+        angles.at(0) = atan(y / x) - atan((l2 * sin(angles.at(1))) / (l1 + l2 * cos(angles.at(1)))) + pi / 2;
+    }
+    else if (x < 0 && y < 0)
+    {
+        angles.at(1) = acos((x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2));
+        angles.at(0) = pi + atan(y / x) - atan((l2 * sin(angles.at(1))) / (l1 + l2 * cos(angles.at(1)))) + pi / 2;
+    }
+    else if (x >= 0 && y < 0)
+    {
+        x0 = -y; y0 = x; y = y0; x = x0; // flipping coordinates for quad. 4
+        angles.at(1) = acos((x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2));
+        angles.at(0) = -pi / 2 + atan(y / x) - atan((l2 * sin(angles.at(1))) / (l1 + l2 * cos(angles.at(1)))) + pi / 2;
+    }
+    else if (x < 0 && y >= 0)
+    {
+        x0 = y; y0 = -x; y = y0; x = x0; // flipping coordinates for quad. 2
+        angles.at(1) = acos((x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2));
+        angles.at(0) = pi / 2 + atan(y / x) - atan((l2 * sin(angles.at(1))) / (l1 + l2 * cos(angles.at(1)))) + pi / 2;
+    }
+    // std::cout << angles.at(0) * 180 / pi << ", " << angles.at(1) * 180 / pi << std::endl;
+
+    return angles;
 }
 
 // method to add each position of an array with the according position of another

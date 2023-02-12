@@ -21,6 +21,8 @@ public:
     std::array<double, 4> getUpdatedStates();
     void setUpdatedStates(std::array<double, 4>);
 
+    std::array<double, 2> inverseKinematics(std::array<double, 2>);
+
     // virtual runge kutta methods to be overridden
     void rungeKutta();
     virtual std::array<double, 4> f(std::array<double, 4>, std::array<double, 2>&);
@@ -37,9 +39,10 @@ protected:			 // maybe change to private -> pass by reference
 
     const double g = 9.81;	    // Gravity
     const double beta1 = 0.02; // Damping on joint 1
-    const double beta2 = 0.03; // Damping on joint 2
-    const float m1 = 0.45;		// Mass Link 1
-    const float m2 = 0.15;		// Mass Link 2
-    const float l1 = 0.2;		// Length Link 1
-    const float l2 = 0.1;		// Length Link 2
+    const double beta2 = 0.02; // Damping on joint 2
+    const double m1 = 0.3;		// Mass Link 1
+    const double m2 = 0.3;		// Mass Link 2
+    const double l1 = 0.5;		// Length Link 1
+    const double l2 = 0.5;		// Length Link 2
+    const double pi = 3.141592653589793238462643383279502884197;
 };
