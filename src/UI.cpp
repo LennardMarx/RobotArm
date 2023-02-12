@@ -80,6 +80,7 @@ void UI::initialize(int sizeX, int sizeY)
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     // scale window
     SDL_SetWindowSize(window, sizeX, sizeY);
     // adjust render scale

@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <list>
 
 // #include <SDL2/SDL_image.h>
 
@@ -31,6 +32,8 @@ int main()
 
     double pi = 3.141592653589793238462643383279502884197;
     double x0, y0, x1, y1, x2, y2; // link positions
+    double x2_prev, y2_prev; // previous endeffector position
+    std::vector<std::array<double, 2>> trajectory;
     x0 = 0; y0 = 0; // base position
     double l1 = 150, l2 = 150; // pendulum length on screen
 
@@ -94,7 +97,7 @@ int main()
                 xd = x_conv;
                 yd = -y_conv;
             }
-            std::cout << xd << ", " << yd << std::endl;
+            //std::cout << xd << ", " << yd << std::endl;
 
 
             // integration
@@ -115,6 +118,10 @@ int main()
             x2 = x1 + l2 * sin(pendulum.getStates().at(0) + pendulum.getStates().at(1));
             y2 = y1 + l2 * cos(pendulum.getStates().at(0) + pendulum.getStates().at(1));
         }
+
+        trajectory.push_back({ x2, y2 });
+
+
 
         // rendering screen
         ui.clear(); // clears screen
@@ -141,7 +148,23 @@ int main()
         // draw pendulum links (middle line)
         // ui.drawLine(x0, y0, x1, y1);
         // ui.drawLine(x1, y1, x2, y2);
+        // if (frameCount == 0)
+        // {
+        //     x2_prev = x2;
+        //     y2_prev = y2;
+        // }
+        // draw trajectory
 
+        for (int i = 1; i < trajectory.size(); i++)
+        {
+            ui.setDrawColor(255, 255, 255, i);
+            ui.drawLine(trajectory.at(i - 1).at(0), trajectory.at(i - 1).at(1), trajectory.at(i).at(0), trajectory.at(i).at(1));
+        }
+
+        if (trajectory.size() > 200)
+        {
+            trajectory.erase(trajectory.begin());
+        }
         ui.present(); // shows rendered objects
 
         frameCount += 1; // count Frame
