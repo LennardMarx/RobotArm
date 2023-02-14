@@ -4,6 +4,7 @@
 // base drone class
 class Pendulum
 {
+    // friend class PendulumDynamics;
 public:
     Pendulum(double, double); // constructor
     virtual ~Pendulum();	   // destructor
@@ -15,7 +16,21 @@ public:
     bool getReset();
     void setReset(bool);
 
+    std::array<double, 2> getMass();
+    void setMass(std::array<double, 2>);
+
+    std::array<double, 2> getLength();
+    void setLength(std::array<double, 2>);
+
+    std::array<double, 2> getDamping();
+    void setDamping(std::array<double, 2>);
+
 private:
     bool reset = false;
     std::array<double, 4> pendulumStates; // drone states
+
+public:
+    std::array<double, 2> m = { 0.3, 0.3 }; // link masses
+    std::array<double, 2> l = { 0.5, 0.5 }; // link lengths
+    std::array<double, 2> beta = { 0.02, 0.02 }; // joint damping
 };

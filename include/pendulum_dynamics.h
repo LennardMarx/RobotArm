@@ -4,6 +4,7 @@
 
 class PendulumDynamics
 {
+    // friend class Pendulum;
 public:
     PendulumDynamics();		  // contructor
     virtual ~PendulumDynamics(); // destructor
@@ -23,7 +24,7 @@ public:
 
     std::array<double, 2> inverseKinematics(std::array<double, 2>);
 
-    void switchControllerState();
+    void toggleController();
 
     // virtual runge kutta methods to be overridden
     void rungeKutta();
@@ -47,7 +48,15 @@ protected:			 // maybe change to private -> pass by reference
     const double l1 = 0.5;		// Length Link 1
     const double l2 = 0.5;		// Length Link 2
     const double pi = 3.141592653589793238462643383279502884197;
-    double x_prev;
-    int turncounter = 0;
-    bool controllerOff = false;
+    double tau1, tau2;
+    // limits on torques
+    int tau1_limit = 100;
+    int tau2_limit = 60;
+    int kp, kd;
+    // Parts of equations of motion
+    double det_M, w1_C, w2_C, w1_G, w2_G, w1_D, w2_D, term1, term2;
+    double x_prev; // for saving x coord of previous frame
+
+    int turncounter = 0; // to count the turns of the desired position
+    bool controllerState = 1; // 1 = controller on, 0 = off
 };

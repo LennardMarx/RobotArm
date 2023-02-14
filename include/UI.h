@@ -23,8 +23,6 @@ public:
     void present();
     void drawPixel(int, int);
     void drawLine(int, int, int, int);
-    // void drawRect(int, int, int, int);
-    // void drawImage(double, double);
     void setDrawColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
     SDL_Renderer*& getRenderer(); // pointer reference to the renderer
     SDL_Window* getWindow();      // pointer to the window
@@ -38,12 +36,5 @@ private:
 private:
     SDL_Window* window = nullptr;     // create window pointer
     SDL_Renderer* renderer = nullptr; // create renderer pointer
-
-    // bools to save chosen drone type and integration method as well as if choices were made
-    bool droneType;
-    bool integrationMethod;
-    bool choice1 = 0;
-    bool choice2 = 0;
     bool quit;
-    // rclcpp::TimerBase::SharedPtr timer_;
 };

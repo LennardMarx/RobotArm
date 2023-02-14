@@ -51,11 +51,6 @@ void UI::drawLine(int x1, int y1, int x2, int y2)
     SDL_RenderDrawLine(renderer, x1 + sizeX / 2, y1 + sizeY / 2, x2 + sizeX / 2, y2 + sizeY / 2);
 }
 
-// void UI::drawRect(int p1, int p2, int p3, int p4)
-// {
-//     drawLine(p1)
-// }
-
 void UI::setDrawColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -76,7 +71,7 @@ void UI::initialize(int sizeX, int sizeY)
     SDL_Init(SDL_INIT_EVERYTHING);
 
     // Create a Window
-    window = SDL_CreateWindow("Double Pendulum Robot", 0, 0, sizeX, sizeY, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Robot Arm", 0, 0, sizeX, sizeY, SDL_WINDOW_SHOWN);
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -87,50 +82,4 @@ void UI::initialize(int sizeX, int sizeY)
     SDL_RenderSetScale(renderer, 1, 1);
     // place window in middle of screen after scaling
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-}
-
-std::vector<unsigned char> UI::WhichKeysDown()
-{
-    // Event handler
-    SDL_Event e;
-    std::vector<unsigned char> KeysDown;
-
-    // Handle events on queue
-    while (SDL_PollEvent(&e) != 0) // Required to update KeyboardState
-    {
-        // User requests quit
-        if (e.type == SDL_QUIT)
-        {
-            quit = true;
-        }
-    }
-
-    // Add any keys that you also want to capture.
-    // For simplicity, I have given all arrow keys a character code (an enum would have been better here...)
-    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-    if (currentKeyStates[SDL_SCANCODE_UP])
-        KeysDown.push_back('u');
-    if (currentKeyStates[SDL_SCANCODE_DOWN])
-        KeysDown.push_back('d');
-    if (currentKeyStates[SDL_SCANCODE_LEFT])
-        KeysDown.push_back('l');
-    if (currentKeyStates[SDL_SCANCODE_RIGHT])
-        KeysDown.push_back('r');
-    if (currentKeyStates[SDL_SCANCODE_Q])
-        KeysDown.push_back('Q');
-    if (currentKeyStates[SDL_SCANCODE_R])
-        KeysDown.push_back('R');
-    if (currentKeyStates[SDL_SCANCODE_D])
-        KeysDown.push_back('D');
-    if (currentKeyStates[SDL_SCANCODE_C])
-        KeysDown.push_back('C');
-    if (currentKeyStates[SDL_SCANCODE_E])
-        KeysDown.push_back('E');
-    if (currentKeyStates[SDL_SCANCODE_K])
-        KeysDown.push_back('K');
-    if (currentKeyStates[SDL_SCANCODE_X])
-        KeysDown.push_back('X');
-    if (currentKeyStates[SDL_SCANCODE_Y])
-        KeysDown.push_back('Y');
-    return KeysDown;
 }
