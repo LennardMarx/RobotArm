@@ -43,8 +43,8 @@ protected:			 // maybe change to private -> pass by reference
     const double g = 9.81;	    // Gravity
     const double beta1 = 0.02; // Damping on joint 1
     const double beta2 = 0.02; // Damping on joint 2
-    const double m1 = 0.3;		// Mass Link 1
-    const double m2 = 0.3;		// Mass Link 2
+    const double m1 = 1;		// Mass Link 1
+    const double m2 = 1;		// Mass Link 2
     const double l1 = 0.5;		// Length Link 1
     const double l2 = 0.5;		// Length Link 2
     const double pi = 3.141592653589793238462643383279502884197;
@@ -52,7 +52,7 @@ protected:			 // maybe change to private -> pass by reference
     // limits on torques
     int tau1_limit = 100;
     int tau2_limit = 60;
-    int kp, kd;
+    int kp = 100, kd = 10;
     // Parts of equations of motion
     double det_M, w1_C, w2_C, w1_G, w2_G, w1_D, w2_D, term1, term2;
     double x_prev; // for saving x coord of previous frame

@@ -72,7 +72,6 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
     if (controllerState)
     {
         // Control Law / Input, kp, kd, gravity compensation
-        kp = 100; kd = 10;
         tau1 = kp * (_u[0] - _states[0]) - kd * (_states[2]) + ((m1 + m2) * l1 * sin(_u[0]) + m2 * l2 * sin(_u[0] + _u[1])) * g;
         tau2 = kp * (_u[1] - _states[1]) - kd * (_states[3]) + (m2 * l2 * sin(_u[0] + _u[1])) * g;
 
@@ -115,9 +114,9 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
     {
         turncounter += 1;
     }
+
     //saving previous x position
     x_prev = x;
-    //std::cout << x << ", " << y << "," << turncounter << std::endl;
 
     // calculating inverse kinematics always in quadtrant 1 and transforming to other quadrants!
     if (x >= 0 && y >= 0)
