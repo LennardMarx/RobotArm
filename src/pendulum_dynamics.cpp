@@ -6,6 +6,7 @@
 #include <vector>
 #include "../include/pendulum.h"
 
+
 PendulumDynamics::PendulumDynamics() // constructor
 {
     // initial states
@@ -13,7 +14,15 @@ PendulumDynamics::PendulumDynamics() // constructor
     setReceivedStates({ 0, 0, 0, 0 });
     setReceivedInputs({ 0, 0 });
 }
-PendulumDynamics::~PendulumDynamics() {} // destructor
+PendulumDynamics::~PendulumDynamics() {} // destructorv
+
+// variables of the pendulum/robot arm
+double m1 = Pendulum::m1;
+double m2 = Pendulum::m2;
+double l1 = Pendulum::l1;
+double l2 = Pendulum::l2;
+double beta1 = Pendulum::beta1;
+double beta2 = Pendulum::beta2;
 
 // get and set functions
 bool PendulumDynamics::getReset() { return reset; }
@@ -48,6 +57,8 @@ void PendulumDynamics::rungeKutta()
 // dynamics of motion (matrix form, relative _angles, damping)
 std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::array<double, 2>& _u)
 {
+
+
     std::array<double, 4> _output;
     // theta1_dot
     _output[0] = _states[2];
@@ -100,6 +111,9 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::ar
 
 std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> _pos)
 {
+    double l1 = Pendulum::l1;
+    double l2 = Pendulum::l2;
+
     std::array<double, 2> _angles;
     double x = _pos[0];
     double y = _pos[1];

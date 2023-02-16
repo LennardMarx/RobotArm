@@ -160,7 +160,6 @@ int main()
             x2 = x1 + l2 * sin(pendulum.getStates().at(0) + pendulum.getStates().at(1));
             y2 = y1 + l2 * cos(pendulum.getStates().at(0) + pendulum.getStates().at(1));
         }
-
         trajectory.push_back({ x2, y2 }); // store endeffector position in trajectory
 
         // rendering screen
@@ -171,33 +170,12 @@ int main()
         double ang1 = pi / 2 - pendulum.getStates().at(0);
         double ang2 = pi / 2 - (pendulum.getStates().at(0) + pendulum.getStates().at(1));
 
-        // draw as rectangle (make function!)
-        // link 1
-        ui.drawLine(x0 + width * sin(ang1), y0 - width * cos(ang1), x1 + width * sin(ang1), y1 - width * cos(ang1));
-        ui.drawLine(x0 - width * sin(ang1), y0 + width * cos(ang1), x1 - width * sin(ang1), y1 + width * cos(ang1));
+        // drawing the links
+        ui.drawTiltedRectangle(x0, y0, x1, y1, ang1, width);
+        ui.drawTiltedRectangle(x1, y1, x2, y2, ang2, width);
 
-        ui.drawLine(x0 + width * sin(ang1), y0 - width * cos(ang1), x0 - width * sin(ang1), y0 + width * cos(ang1));
-        ui.drawLine(x1 + width * sin(ang1), y1 - width * cos(ang1), x1 - width * sin(ang1), y1 + width * cos(ang1));
-
-        // link 2
-        ui.drawLine(x1 + width * sin(ang2), y1 - width * cos(ang2), x2 + width * sin(ang2), y2 - width * cos(ang2));
-        ui.drawLine(x1 - width * sin(ang2), y1 + width * cos(ang2), x2 - width * sin(ang2), y2 + width * cos(ang2));
-
-        ui.drawLine(x1 + width * sin(ang2), y1 - width * cos(ang2), x1 - width * sin(ang2), y1 + width * cos(ang2));
-        ui.drawLine(x2 + width * sin(ang2), y2 - width * cos(ang2), x2 - width * sin(ang2), y2 + width * cos(ang2));
-
-        // draw trajectory (intensity dependend on recency)
-        // for (int i = 1; i < trajectory.size(); i++)
-        // {
-        //     ui.setDrawColor(255, 255, 255, i);
-        //     ui.drawLine(trajectory.at(i - 1).at(0), trajectory.at(i - 1).at(1), trajectory.at(i).at(0), trajectory.at(i).at(1));
-        // }
-
-        // only draw last X positions
-        if (trajectory.size() > 200)
-        {
-            trajectory.erase(trajectory.begin());
-        }
+        // draw trajectory (intensity dependend on recency), define trajectory length
+        ui.drawTrajectory(trajectory, 50);
 
         ui.present(); // shows rendered objects
 

@@ -1,0 +1,14 @@
+Computer Vision
+- detect Hand -> Finger pinch
+   - follow index finger when pinched
+   - controller off when hand open
+- draw shadow of hand in background of window?
+
+
+
+General
+- counting rotations of robot and reference (potentially different when controller off)
+   - angle = angle * (rotation reference - rotation arm) [?]
+
+
+

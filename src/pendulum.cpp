@@ -17,14 +17,14 @@ Pendulum::~Pendulum() {} // destructor
 std::array<double, 4> Pendulum::getStates() { return pendulumStates; }
 void Pendulum::setStates(std::array<double, 4> _x) { pendulumStates = _x; }
 
-std::array<const double, 2> Pendulum::getMass() { return m; }
+// std::array<const double, 2> Pendulum::getMass() { return m; }
 // void Pendulum::setMass(std::array<const double, 2> _m) { m = _m; }
 
-std::array<double, 2> Pendulum::getLength() { return l; }
-void Pendulum::setLength(std::array<double, 2> _l) { l = _l; }
+// std::array<double, 2> Pendulum::getLength() { return l; }
+// void Pendulum::setLength(std::array<double, 2> _l) { l = _l; }
 
-std::array<double, 2> Pendulum::getDamping() { return beta; }
-void Pendulum::setDamping(std::array<double, 2> _beta) { beta = _beta; }
+// std::array<double, 2> Pendulum::getDamping() { return beta; }
+// void Pendulum::setDamping(std::array<double, 2> _beta) { beta = _beta; }
 
 bool Pendulum::getReset() { return reset; }
 void Pendulum::setReset(bool _reset) { reset = _reset; }

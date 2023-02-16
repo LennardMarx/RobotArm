@@ -1,3 +1,6 @@
+#ifndef UI_H
+#define UI_H
+
 #pragma once
 #include <SDL2/SDL.h>
 #include <chrono>
@@ -23,6 +26,9 @@ public:
     void present();
     void drawPixel(int, int);
     void drawLine(int, int, int, int);
+    void drawTiltedRectangle(double, double, double, double, double, int);
+    void drawTrajectory(std::vector<std::array<double, 2>>&, int);
+
     void setDrawColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
     SDL_Renderer*& getRenderer(); // pointer reference to the renderer
     SDL_Window* getWindow();      // pointer to the window
@@ -38,3 +44,5 @@ private:
     SDL_Renderer* renderer = nullptr; // create renderer pointer
     bool quit;
 };
+
+#endif

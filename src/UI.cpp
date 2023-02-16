@@ -46,9 +46,35 @@ void UI::drawPixel(int x, int y)
     SDL_RenderDrawPoint(renderer, x + sizeX / 2, y + sizeY / 2);
 }
 // function to draw line between two points
-void UI::drawLine(int x1, int y1, int x2, int y2)
+void UI::drawLine(int _x2, int _y2, int x2, int y2)
 {
-    SDL_RenderDrawLine(renderer, x1 + sizeX / 2, y1 + sizeY / 2, x2 + sizeX / 2, y2 + sizeY / 2);
+    SDL_RenderDrawLine(renderer, _x2 + sizeX / 2, _y2 + sizeY / 2, x2 + sizeX / 2, y2 + sizeY / 2);
+}
+
+
+// drawing a rectangle along a line (for links)
+void UI::drawTiltedRectangle(double _x1, double _y1, double _x2, double _y2, double _ang, int _width)
+{
+    this->drawLine(_x1 + _width * sin(_ang), _y1 - _width * cos(_ang), _x2 + _width * sin(_ang), _y2 - _width * cos(_ang));
+    this->drawLine(_x1 - _width * sin(_ang), _y1 + _width * cos(_ang), _x2 - _width * sin(_ang), _y2 + _width * cos(_ang));
+
+    this->drawLine(_x1 + _width * sin(_ang), _y1 - _width * cos(_ang), _x1 - _width * sin(_ang), _y1 + _width * cos(_ang));
+    this->drawLine(_x2 + _width * sin(_ang), _y2 - _width * cos(_ang), _x2 - _width * sin(_ang), _y2 + _width * cos(_ang));
+}
+
+// draw trajectory (intensity dependend on recency)
+void UI::drawTrajectory(std::vector<std::array<double, 2>>& _trajectory, int _length)
+{
+    for (int i = 1; i < _trajectory.size(); i++)
+    {
+        this->setDrawColor(255, 255, 255, i);
+        this->drawLine(_trajectory[i - 1][0], _trajectory[i - 1][1], _trajectory[i][0], _trajectory[i][1]);
+    }
+    // only draw last X positions
+    if (_trajectory.size() > _length)
+    {
+        _trajectory.erase(_trajectory.begin());
+    }
 }
 
 void UI::setDrawColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a)

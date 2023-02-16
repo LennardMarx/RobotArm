@@ -1,3 +1,6 @@
+#ifndef PENDULUM_H
+#define PENDULUM_H
+
 #pragma once
 #include <array>
 #include "../include/pendulum_dynamics.h"
@@ -31,8 +34,15 @@ private:
     std::array<double, 4> pendulumStates; // drone states
 
 public:
-    std::array<const double, 2> m = { 0.3, 0.3 }; // link masses
-    static double m3;
-    std::array<double, 2> l = { 0.5, 0.5 }; // link lengths
-    std::array<double, 2> beta = { 0.02, 0.02 }; // joint damping
+    // variables of the robot arm
+    // static -> immutable?
+    // inline -> would else have to be declared (?) in .ccp
+    static inline const double beta1 = 0.02; // Damping on joint 1
+    static inline const double beta2 = 0.02; // Damping on joint 2
+    static inline const double m1 = 1;		// Mass Link 1
+    static inline const double m2 = 1;		// Mass Link 2
+    static inline const double l1 = 0.5;		// Length Link 1
+    static inline const double l2 = 0.5;		// Length Link 2
 };
+
+#endif
