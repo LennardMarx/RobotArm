@@ -11,4 +11,6 @@ General
    - angle = angle * (rotation reference - rotation arm) [?]
 
 
-
+Structure
+- seperate class for all bools etc (maybe in event_checks.h)
+  - toggle them there and reach them around

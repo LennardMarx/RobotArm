@@ -5,12 +5,11 @@
 #include <array>
 #include "../include/pendulum_dynamics.h"
 
-// base drone class
 class Pendulum
 {
     friend class PendulumDynamics;
 public:
-    Pendulum(double, double); // constructor
+    Pendulum(); // constructor
     virtual ~Pendulum();	   // destructor
 
     // get and set methods

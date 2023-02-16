@@ -8,9 +8,13 @@
 
 using namespace std::chrono_literals;
 
-Pendulum::Pendulum(double _th1, double _th2) // constructor
+// Pendulum::Pendulum(double _th1, double _th2): pendulumStates({ _th1, _th2, 0, 0 }) // constructor
+// {
+//     // setStates({ _th1, _th2, 0, 0 });
+// }
+Pendulum::Pendulum() // constructor
 {
-    setStates({ _th1, _th2, 0, 0 });
+    // setStates({ _th1, _th2, 0, 0 });
 }
 Pendulum::~Pendulum() {} // destructor
 
