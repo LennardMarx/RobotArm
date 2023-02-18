@@ -1,10 +1,12 @@
 #ifndef SIM_LOOP_H
 #define SIM_LOOP_H
 
+#pragma once
 #include "../include/UI.h"
 #include "../include/pendulum.h"
 #include "../include/pendulum_dynamics.h"
 #include "../include/event_checks.h"
+#include "../include/helper_variables.h"
 
 #include <SDL2/SDL.h>
 #include <iostream>
@@ -34,14 +36,12 @@ private:
     int window_width = 1200;
     int window_height = 800;
     UI ui{ window_width, window_height };
+
+    Pendulum pendulum;
     PendulumDynamics pendulumDynamics;
-    EventChecks eventChecks;
-    Pendulum pendulum; // pendulum with initial angles
-
     HelperVars helperVars;
+    EventChecks eventChecks;
     Uint32 mouseState;
-
-    std::vector<std::array<double, 2>> trajectory;
 
     double pi = 3.141592653589793238462643383279502884197;
     double x0 = 0, y0 = 0, x1, y1, x2, y2; // link positions
@@ -63,9 +63,5 @@ private:
 
     int frameCount = 0;
 };
-
-
-
-
 
 #endif

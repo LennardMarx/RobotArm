@@ -3,9 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include "../include/pendulum_dynamics.h"
-#include <vector>
-#include "../include/pendulum.h"
-
 
 PendulumDynamics::PendulumDynamics() // constructor
 {
@@ -38,6 +35,17 @@ void PendulumDynamics::setReceivedStates(const std::array<double, 4>& _states) {
 std::array<double, 4> PendulumDynamics::getUpdatedStates() { return updatedStates; }
 void PendulumDynamics::setUpdatedStates(std::array<double, 4> _xdot) { updatedStates = _xdot; }
 
+std::array<int, 2> PendulumDynamics::getRotations()
+{
+    updateRotations();
+    return rotations;
+}
+void PendulumDynamics::updateRotations()
+{
+    rotations[0] = getReceivedStates()[0] / (2 * pi);
+    rotations[1] = getReceivedStates()[1] / (2 * pi);
+}
+
 // runge kutta method calculating the intermediate steps
 void PendulumDynamics::rungeKutta()
 {
@@ -50,15 +58,25 @@ void PendulumDynamics::rungeKutta()
     {
         _updatedStates[i] = receivedStates[i] + (h * ((K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6));
     }
+    //account for rotations
+    // print();
+    // _updatedStates[0] -= ((int)(receivedStates[0] / (2 * pi)) - rotation_reference + 1) * 2 * pi;
+    // _updatedStates[1] -= getRotations()[1] * 2 * pi;
     setUpdatedStates(_updatedStates);
+}
+
+void PendulumDynamics::print()
+{
+    updateRotations();
+    //std::cout << rotation_reference << ", " << rotations[0] << ", " << rotations[1] << std::endl;
+    std::cout << (int)(receivedStates[0] / (2 * pi)) << ", " << (int)(receivedStates[1] / (2 * pi)) << ", " << rotation_reference[0] << std::endl;
+
 }
 
 // the method to integrate the runge kutta intermediate steps
 // dynamics of motion (matrix form, relative _angles, damping)
 std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states, std::array<double, 2>& _u)
 {
-
-
     std::array<double, 4> _output;
     // theta1_dot
     _output[0] = _states[2];
@@ -122,13 +140,12 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
     // counting turn if endeffector crosses origin (+- 2 pi)
     if (x < 0 && x_prev >= 0 && y < 0)
     {
-        turncounter -= 1;
+        rotation_reference[0] -= 1;
     }
     else if (x >= 0 && x_prev < 0 && y < 0)
     {
-        turncounter += 1;
+        rotation_reference[0] += 1;
     }
-
     //saving previous x position
     x_prev = x;
 
@@ -155,9 +172,17 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
         _angles[1] = acos((x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2));
         _angles[0] = pi / 2 + atan(y / x) - atan((l2 * sin(_angles.at(1))) / (l1 + l2 * cos(_angles.at(1)))) + pi / 2;
     }
-    // std::cout << _angles.at(0) * 180 / pi << ", " << _angles.at(1) * 180 / pi << std::endl;
 
-    _angles[0] += turncounter * 2 * pi;
+    // correct for discrepency between rotations of pendulum and reference
+    if (!controllerState)
+    {
+        rotation_reference[0] += rotation_reference[0] - getRotations()[0];
+        rotation_reference[1] += rotation_reference[1] - getRotations()[1];
+    }
+
+    _angles[0] += rotation_reference[0] * 2 * pi;
+    _angles[1] += rotation_reference[1] * 2 * pi;
+    // std::cout << _angles[0] << std::endl;
 
     return _angles;
 }
@@ -165,6 +190,8 @@ std::array<double, 2> PendulumDynamics::inverseKinematics(std::array<double, 2> 
 void PendulumDynamics::toggleController()
 {
     controllerState = !controllerState;
+
+
 }
 
 // method to add each position of an array with the according position of another

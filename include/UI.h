@@ -33,9 +33,6 @@ public:
     SDL_Renderer*& getRenderer(); // pointer reference to the renderer
     SDL_Window* getWindow();      // pointer to the window
 
-
-    std::vector<unsigned char> WhichKeysDown();
-
 private:
     void initialize(int, int);
 

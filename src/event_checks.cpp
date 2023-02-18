@@ -1,34 +1,5 @@
 #include "../include/event_checks.h"
 
-
-HelperVars::HelperVars(/* args */)
-{
-}
-
-HelperVars::~HelperVars()
-{
-}
-
-void HelperVars::toggleQuit()
-{
-    quit = !quit;
-}
-bool HelperVars::getQuit()
-{
-    return quit;
-}
-
-void HelperVars::toggleReset()
-{
-    reset = !reset;
-}
-bool HelperVars::getReset()
-{
-    return reset;
-}
-
-//===================================================================
-
 EventChecks::EventChecks()
 {}
 EventChecks::~EventChecks()
@@ -59,6 +30,10 @@ void EventChecks::checkEvents(HelperVars& _helperVars, PendulumDynamics& _pendul
                 break;
             case SDLK_r:
                 _helperVars.toggleReset();
+                break;
+            case SDLK_t:
+                _helperVars.toggleTrajOn();
+                _helperVars.getTrajectory().clear();
                 break;
             case SDLK_SPACE:
                 //pause = true;

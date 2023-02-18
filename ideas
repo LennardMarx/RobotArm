@@ -10,6 +10,9 @@ General
 - counting rotations of robot and reference (potentially different when controller off)
    - angle = angle * (rotation reference - rotation arm) [?]
 
+Angle problem
+- INSTEAD of adjusting dersired angle
+   - reset angle every time it hits 2pi!!!
 
 Structure
 - seperate class for all bools etc (maybe in event_checks.h)

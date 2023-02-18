@@ -7,30 +7,29 @@
 
 class Pendulum
 {
-    friend class PendulumDynamics;
 public:
-    Pendulum(); // constructor
+    Pendulum(double, double); // constructor
     virtual ~Pendulum();	   // destructor
 
     // get and set methods
-    std::array<double, 4> getStates();
+    std::array<double, 4>& getStates();
     void setStates(std::array<double, 4>);
 
     bool getReset();
     void setReset(bool);
 
-    std::array<const double, 2> getMass();
-    // void setMass(std::array<double, 2>);
+    std::array<int, 2> getRotations();
+    void updateRotations();
 
-    std::array<double, 2> getLength();
-    void setLength(std::array<double, 2>);
-
-    std::array<double, 2> getDamping();
-    void setDamping(std::array<double, 2>);
+    std::array<double, 4>& getPreviousStates();
+    void keepBetweenZeroAndPi();
 
 private:
+    const double pi = 3.141592653589793238462643383279502884197;
     bool reset = false;
     std::array<double, 4> pendulumStates; // drone states
+    std::array<double, 4> previousStates;
+    std::array<int, 2> rotations = { 0, 0 };
 
 public:
     // variables of the robot arm

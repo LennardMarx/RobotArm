@@ -1,19 +1,11 @@
 #include "../include/sim_loop.h"
 
-
-SimLoop::SimLoop()
-{
-}
-
-SimLoop::~SimLoop()
-{
-}
+SimLoop::SimLoop(): pendulum(Pendulum(0, 0)) {}
+SimLoop::~SimLoop() {}
 
 void SimLoop::run()
 {
     chdir(SDL_GetBasePath());
-
-    pendulum.setStates({ qd1, qd2, 0, 0 });
 
     while (!helperVars.getQuit())
     {
@@ -82,7 +74,7 @@ void SimLoop::run()
             x2 = x1 + l2 * sin(pendulum.getStates().at(0) + pendulum.getStates().at(1));
             y2 = y1 + l2 * cos(pendulum.getStates().at(0) + pendulum.getStates().at(1));
         }
-        trajectory.push_back({ x2, y2 }); // store endeffector position in trajectory
+        helperVars.getTrajectory().push_back({ x2, y2 }); // store endeffector position in trajectory
 
         // rendering screen
         ui.clear(); // clears screen
@@ -97,8 +89,10 @@ void SimLoop::run()
         ui.drawTiltedRectangle(x1, y1, x2, y2, ang2, width);
 
         // draw trajectory (intensity dependend on recency), define trajectory length
-        ui.drawTrajectory(trajectory, 50);
-
+        if (helperVars.getTrajOn())
+        {
+            ui.drawTrajectory(helperVars.getTrajectory(), 200);
+        }
         ui.present(); // shows rendered objects
 
         frameCount += 1; // count Frame
