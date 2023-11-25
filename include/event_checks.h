@@ -1,19 +1,19 @@
 #ifndef EVENT_CHECKS_H
 #define EVENT_CHECKS_H
 
-#include "../include/pendulum_dynamics.h"
 #include "../include/helper_variables.h"
+#include "../include/pendulum_dynamics.h"
 #include <SDL2/SDL.h>
 
-class EventChecks
-{
+class EventChecks {
 public:
-    EventChecks();
-    ~EventChecks();
+  EventChecks();
+  ~EventChecks();
 
-    void checkEvents(HelperVars&, PendulumDynamics&);
+  void checkEvents(HelperVars &, PendulumDynamics &);
+
 private:
-    SDL_Event event;
+  SDL_Event event;
 };
 
 #endif
