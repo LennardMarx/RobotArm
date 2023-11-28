@@ -8,7 +8,6 @@
 #include <memory>
 #include <string>
 #include <utility>
-// #include <SDL2/SDL_image.h>
 #include <vector>
 
 using namespace std::chrono_literals;

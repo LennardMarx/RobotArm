@@ -30,9 +30,10 @@ public:
 private:
   static inline bool quit = false;
   static inline bool reset = false;
-  static inline bool trajOn = false;
+  static inline bool trajOn = true;
   static inline std::vector<std::array<double, 2>> trajectory;
-  static inline bool controllerState = 1; // 1 = controller on, 0 = off
+  // 1 = controller on, 0 = off
+  static inline bool controllerState = 1;
   static inline std::array<int, 2> rotations = {0, 0};
 };
 
