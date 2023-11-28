@@ -15,4 +15,8 @@ Two keys can be pressed to influence the behavior of the program:
 
 ## Equations of motion
 
+- will follow
+
 ## Control law (non-linear control)
+
+- will follow
