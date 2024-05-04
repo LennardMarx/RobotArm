@@ -1,6 +1,8 @@
 # Double Pendulum Robot Arm Controller
 
-![Image](resources/demo.png)
+<img src="resources/demo.png" width="600">
+
+<!-- ![Image](resources/demo.png) -->
 
 ## The Functionality
 
