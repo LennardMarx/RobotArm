@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=Robot Arm
-Type=Application
-Exec=/home/lennard/Projects/RobotArm/bin/robotarm
-Icon=/home/lennard/Projects/RobotArm/resources/robotarm_icon.png
-Terminal=false

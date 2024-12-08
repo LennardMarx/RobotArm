@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/lennard/Projects/robotarm/build",
-  "command": "/usr/bin/c++  -I/home/lennard/Projects/robotarm/include -std=gnu++17 -o CMakeFiles/robotarm.dir/src/main.cpp.o -c /home/lennard/Projects/robotarm/src/main.cpp",
-  "file": "/home/lennard/Projects/robotarm/src/main.cpp"
-}
-]
