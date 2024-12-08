@@ -1,8 +1,4 @@
 #include "../include/pendulum_dynamics.h"
-#include <cmath>
-// #include <cstdio>
-// #include <fstream>
-#include <iostream>
 
 PendulumDynamics::PendulumDynamics() // constructor
 {
@@ -14,12 +10,18 @@ PendulumDynamics::PendulumDynamics() // constructor
 PendulumDynamics::~PendulumDynamics() {} // destructorv
 
 // variables of the pendulum/robot arm
-double m1 = Pendulum::m1;
-double m2 = Pendulum::m2;
-double l1 = Pendulum::l1;
-double l2 = Pendulum::l2;
-double beta1 = Pendulum::beta1;
-double beta2 = Pendulum::beta2;
+// double m1 = Pendulum::m1;
+// double m2 = Pendulum::m2;
+// double l1 = Pendulum::l1;
+// double l2 = Pendulum::l2;
+// double beta1 = Pendulum::beta1;
+// double beta2 = Pendulum::beta2;
+// static inline const double beta1 = 0.02; // Damping on joint 1
+// static inline const double beta2 = 0.02; // Damping on joint 2
+// static inline const double m1 = 1;       // Mass Link 1
+// static inline const double m2 = 1;       // Mass Link 2
+// static inline const double l1 = 0.5;     // Length Link 1
+// static inline const double l2 = 0.5;     // Length Link 2
 
 // get and set functions
 bool PendulumDynamics::getReset() { return reset; }
@@ -70,8 +72,8 @@ void PendulumDynamics::rungeKutta() {
   // account for rotations
   //  print();
   //  _updatedStates[0] -= ((int)(receivedStates[0] / (2 * pi)) -
-  //  rotation_reference + 1) * 2 * pi; _updatedStates[1] -= getRotations()[1] *
-  //  2 * pi;
+  //  rotation_reference + 1) * 2 * pi; _updatedStates[1] -= getRotations()[1]
+  //  * 2 * pi;
   setUpdatedStates(_updatedStates);
 }
 
@@ -161,8 +163,10 @@ std::array<double, 4> PendulumDynamics::f(std::array<double, 4> _states,
 
 std::array<double, 2>
 PendulumDynamics::inverseKinematics(std::array<double, 2> _pos) {
-  double l1 = Pendulum::l1;
-  double l2 = Pendulum::l2;
+  // double l1 = Pendulum::l1;
+  // double l2 = Pendulum::l2;
+  double l1 = 0.5; // Length Link 1
+  double l2 = 0.5; // Length Link 2
 
   std::array<double, 2> _angles;
   double x = _pos[0];

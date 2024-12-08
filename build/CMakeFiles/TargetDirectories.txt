@@ -1,0 +1,3 @@
+/home/lennard/Projects/robotarm/build/CMakeFiles/robotarm.dir
+/home/lennard/Projects/robotarm/build/CMakeFiles/edit_cache.dir
+/home/lennard/Projects/robotarm/build/CMakeFiles/rebuild_cache.dir

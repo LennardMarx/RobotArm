@@ -2,30 +2,45 @@
 #define HELPER_VARS_H
 
 #pragma once
-#include "../include/pendulum.h"
+#include "pendulum.h"
 #include <array>
 #include <vector>
 
 class HelperVars {
 public:
-  HelperVars();
-  ~HelperVars();
+  // HelperVars();
+  // ~HelperVars();
+  //
+  // void toggleQuit();
+  // bool getQuit();
+  //
+  // void toggleReset();
+  // bool getReset();
+  //
+  // void toggleTrajOn();
+  // bool getTrajOn();
+  //
+  // std::vector<std::array<double, 2>> &getTrajectory();
+  //
+  // void toggleController();
+  // bool getControllerState();
+  //
+  // std::array<int, 2> &getRotations();
+  void toggleQuit() { quit = !quit; }
+  bool getQuit() { return quit; }
 
-  void toggleQuit();
-  bool getQuit();
+  void toggleReset() { reset = !reset; }
+  bool getReset() { return reset; }
 
-  void toggleReset();
-  bool getReset();
+  void toggleTrajOn() { trajOn = !trajOn; };
+  bool getTrajOn() { return trajOn; }
 
-  void toggleTrajOn();
-  bool getTrajOn();
+  std::vector<std::array<double, 2>> &getTrajectory() { return trajectory; }
 
-  std::vector<std::array<double, 2>> &getTrajectory();
+  void toggleController() { controllerState = !controllerState; }
+  bool getControllerState() { return controllerState; }
 
-  void toggleController();
-  bool getControllerState();
-
-  std::array<int, 2> &getRotations();
+  std::array<int, 2> &getRotations() { return rotations; }
 
 private:
   static inline bool quit = false;

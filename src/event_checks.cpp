@@ -1,8 +1,9 @@
 #include "../include/event_checks.h"
 
-EventChecks::EventChecks() {}
-EventChecks::~EventChecks() {}
+// EventChecks();
+// ~EventChecks();
 
+// void checkEvents(HelperVars &, PendulumDynamics &);
 void EventChecks::checkEvents(HelperVars &_helperVars,
                               PendulumDynamics &_pendulumDynamics) {
   while (SDL_PollEvent(&event) != 0) {

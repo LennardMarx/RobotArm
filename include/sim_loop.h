@@ -2,32 +2,23 @@
 #define SIM_LOOP_H
 
 #pragma once
-#include "../include/UI.h"
-#include "../include/event_checks.h"
-#include "../include/helper_variables.h"
-#include "../include/pendulum.h"
-#include "../include/pendulum_dynamics.h"
+#include "UI.h"
+#include "event_checks.h"
+#include "helper_variables.h"
+#include "pendulum.h"
+#include "pendulum_dynamics.h"
+#include <cstdlib>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 #include <SDL2/SDL.h>
-#include <chrono>
 #include <ctime>
-#include <iostream>
-#include <ratio>
-
-#include <list>
-#include <string>
 #include <unistd.h>
-#include <utility>
 #include <vector>
 
-class SimLoop {
-public:
-  SimLoop();
-  ~SimLoop();
-
-  void run();
-
-private:
+struct context {
   const int FPS = 60;                // set FPS
   const int frameDelay = 1000 / FPS; // delay according to FPS
   Uint32 frameStart;                 // keeps track of time (?)
@@ -37,7 +28,7 @@ private:
   int window_height = 800;
   UI ui{window_width, window_height};
 
-  Pendulum pendulum;
+  Pendulum pendulum{0, 0};
   PendulumDynamics pendulumDynamics;
   HelperVars helperVars;
   EventChecks eventChecks;
@@ -63,6 +54,22 @@ private:
   bool controllerOff = false;
 
   int frameCount = 0;
+};
+
+class SimLoop {
+public:
+  SimLoop();
+  ~SimLoop();
+
+  // Pendulum pendulum;
+  context ctx;
+
+  void run();
+
+private:
+  static void mainloop(void *arg);
+
+private:
 };
 
 #endif

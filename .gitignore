@@ -5,6 +5,9 @@
 *.xcf
 
 # Directories
+build/
 
 # Misc
 ideas
+*.desktop
+run.sh
